@@ -7,7 +7,7 @@ Esta é uma "Skill" customizada para agentes de Inteligência Artificial (como o
 Para iniciar uma avaliação, basta fornecer um comando apontando para a skill e fazer o upload dos printscreens da jornada (idealmente numerados, ex: `1-home.jpg`, `2-login.jpg`).
 
 **Exemplo de Prompt:**
-> "Execute a skill ux-heuristics descrita na sua pasta. Aqui estão os prints do fluxo de checkout."
+> "Execute a skill ux-heuristic-evaluation-skill descrita na sua pasta. Aqui estão os prints do fluxo de checkout."
 
 Ao ser acionada, se você não passar o contexto no próprio prompt, a IA assumirá o controle e fará uma **Etapa de Entrevista** com 5 perguntas rápidas (Produto, Plataforma, Fluxo, Público/Estado Cognitivo e Formato de Saída). Isso garante que a auditoria seja altamente contextualizada e entregue exatamente no formato que você precisar (texto livre, documento `.md` ou planilha `.xlsx`).
 

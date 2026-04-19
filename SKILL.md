@@ -1,5 +1,5 @@
 ---
-name: ux-heuristics
+name: ux-heuristic-evaluation-skill
 description: 'Avaliar e melhorar a usabilidade de interfaces (aplicativos ou sites) usando análise heurística. Use quando for solicitado uma "avaliação de usabilidade", "auditoria UX", "avaliação heurística" ou quando fornecer printscreens de um aplicativo.'
 metadata:
   author: AI Agent / Gabriel
