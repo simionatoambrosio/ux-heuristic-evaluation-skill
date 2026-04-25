@@ -1,31 +1,101 @@
 # Skill: UX Heuristics & Acessibilidade
 
-Esta é uma "Skill" customizada para agentes de Inteligência Artificial (como o Gemini), construída para automatizar a Avaliação Heurística e a Auditoria de Acessibilidade Visual de aplicativos e sistemas digitais através de análise de imagens (printscreens).
+Esta é uma "Skill" avançada customizada para agentes de Inteligência Artificial (como o Gemini), construída para automatizar a Avaliação Heurística e a Auditoria de Acessibilidade Visual de aplicativos e sistemas digitais através de análise de imagens (printscreens).
 
-## 🚀 Como Utilizar
+## 🚀 Como Funciona (O Processo)
 
-Para iniciar uma avaliação, basta fornecer um comando apontando para a skill e fazer o upload dos printscreens da jornada (idealmente numerados, ex: `1-home.jpg`, `2-login.jpg`).
+O fluxo da Skill pode ser visualizado abaixo, bifurcando-se entre uma análise rápida (Agente Único) ou uma profunda orquestração paralela (Colegiado Multi-Agente):
+
+```text
++-------------------------------------------------+
+|             1. GATILHO E SETUP                  |
+|  Usuário envia printscreens do app para a IA.   |
+|  A IA realiza a "Entrevista" (Público, Modo...) |
++-----------------------+-------------------------+
+                        |
+            +-----------v-----------+
+            | 2. ESCOLHA DE MODO    |
+            | Como será a análise?  |
+            +---+---------------+---+
+                |               |
+      +---------v--+         +--v---------+
+      |  MODO A    |         |  MODO B    |
+      |  (Único)   |         |(Colegiado) |
+      +---------+--+         +--+---------+
+                |               |
+                |     +---------v---------------------------+
+                |     | 3. ORQUESTRAÇÃO MULTI-AGENTE        |
+                |     | (Execução via orchestrator.js)      |
+                |     +----+----------+----------+----------+
+                |          |          |          |
+                |     +----v----+ +---v-----+ +--v--------+
+                |     |Inspetor | | Curador | |Otimizador |
+                |     |(Lógica) | |(Clareza)| | (Atrito)  |
+                |     +----+----+ +---+-----+ +--+--------+
+                |          |          |          |
+                |     +----v----------v----------v----------+
+                |     |       MODERADOR SÊNIOR              |
+                |     | (Consolida, remove redundâncias)    |
+                |     +-------------------+-----------------+
+                |                         |
+            +---v-------------------------v---+
+            |        4. SAÍDA DE DADOS        |
+            | Exporta no formato desejado:    |
+            | Chat, Markdown ou Excel (.xlsx) |
+            +---------------------------------+
+```
+
+## 🧠 Como Utilizar
+
+Para iniciar uma avaliação, basta fornecer um comando apontando para a skill e fazer o upload dos printscreens da jornada.
 
 **Exemplo de Prompt:**
-> "Execute a skill ux-heuristic-evaluation-skill descrita na sua pasta. Aqui estão os prints do fluxo de checkout."
+> "Execute a skill ux-heuristic-evaluation-skill. Aqui estão os prints do fluxo. Quero a avaliação no Modo Colegiado."
 
-Ao ser acionada, se você não passar o contexto no próprio prompt, a IA assumirá o controle e fará uma **Etapa de Entrevista** com 5 perguntas rápidas (Produto, Plataforma, Fluxo, Público/Estado Cognitivo e Formato de Saída). Isso garante que a auditoria seja altamente contextualizada e entregue exatamente no formato que você precisar (texto livre, documento `.md` ou planilha `.xlsx`).
+Ao ser acionada, se você não passar o contexto no próprio prompt, a IA assumirá o controle e fará uma **Etapa de Entrevista** com 4 perguntas rápidas. Isso garante que a auditoria seja contextualizada para o estado mental do usuário e entregue exatamente no formato que você precisar.
+
+## ⚙️ Pré-requisitos e Instalação
+
+Para que o **Modo Colegiado (Multi-Agente)** e a exportação em Excel funcionem corretamente na sua máquina, você precisa preparar o ambiente:
+
+1. **Instale o Node.js:** Necessário para rodar os scripts da pasta `scratch/`.
+2. **Instale as dependências:** Abra o terminal na pasta `scratch/` e execute:
+   ```bash
+   cd scratch
+   npm install
+   ```
+3. **Configure sua Chave de API:**
+   Dentro da pasta `scratch/`, faça uma cópia do arquivo `.env.example` e renomeie para `.env`.
+   Abra o arquivo `.env` e cole a sua chave do Gemini.
+   *(Se você não tem uma chave, acesse o [Google AI Studio](https://aistudio.google.com/app/apikey), crie um projeto e gere uma chave gratuita).*
+   `GEMINI_API_KEY="sua_chave_aqui"`
 
 ## 📂 Estrutura de Arquivos
 
-A skill funciona consultando ativamente os arquivos desta pasta:
+A skill funciona consultando ativamente os arquivos desta pasta e disparando scripts quando necessário:
 
-- `SKILL.md`: O "motor" da skill. Contém as instruções primárias, o prompt de sistema, o gatilho da entrevista inicial e a escala de severidade oficial (0 a 4).
-- `references/nielsen-heuristics.md`: Um guia técnico e checklist profundo das 10 Heurísticas de Usabilidade de Jakob Nielsen.
-- `references/accessibility-guidelines.md`: Checklist focado em Acessibilidade Visual (baseado em diretrizes da WCAG e boas práticas mobile), focado no que pode ser auditado via imagem (contraste, touch targets, uso da cor, estrutura).
-- `references/output-format.md`: O template rigoroso de formatação. Obriga a IA a gerar tabelas separadas para UX e Acessibilidade por tela e um sumário executivo final.
-- `outputs/`: Diretório criado dinamicamente onde o agente salvará todos os relatórios físicos gerados (arquivos `.md` ou planilhas `.xlsx`).
+- `SKILL.md`: O "motor" da skill. Contém a identidade, gatilho, regras e tratamentos de exceção para a IA.
+- `scratch/orchestrator.js`: Script Node.js de paralelismo. Executado fisicamente pela IA quando o "Modo Colegiado" é solicitado.
+- `scratch/generate_excel.js` / `.py`: Scripts para conversão e estilização do relatório em planilha `.xlsx`.
+- `references/nielsen-heuristics.md`: Base de conhecimento com as 10 Heurísticas de Jakob Nielsen.
+- `references/accessibility-guidelines.md`: Checklist focado em Acessibilidade Visual (WCAG).
+- `references/output-format.md`: Template rigoroso de formatação garantindo a padronização dos relatórios.
+- `outputs/`: Diretório de exportação final dos arquivos gerados.
 
 ---
 
 ## 📝 Changelog (Histórico de Mudanças)
 
 Sempre que a lógica, o escopo ou as instruções da skill forem atualizados, o histórico abaixo deve refletir as mudanças.
+
+**Versão 2.1.0**
+- Substituição do paralelismo de requisições (`Promise.all`) por uma execução sequencial com *Throttling* (delay de 15 segundos entre cada agente). Otimização vital para evitar o erro `429 Too Many Requests` e respeitar os limites de Rate Limit do **Free Tier** do Gemini.
+- Troca do modelo de auditoria de `gemini-1.5-pro-latest` para `gemini-2.5-flash`, maximizando o limite de tokens TPM (Tokens Per Minute) em contas gratuitas sem perda de capacidade analítica visual.
+
+**Versão 2.0.0**
+- Implementação da arquitetura **Multi-Agent System (MAS)** via `orchestrator.js` para rodar 3 personas de IA isoladas (Inspetor, Curador e Otimizador) + 1 Moderador Sênior.
+- Injeção dinâmica de contexto local (arquivos de referência) dentro do script Node.
+- Refatoração profunda do `SKILL.md` adotando linguagem imperativa de alta performance, eliminando redundâncias e criando fallbacks para exceções (Edge Cases).
 
 **Versão 1.1.0**
 - Inclusão da capacidade de exportação de arquivos físicos (Markdown ou Excel) gerados nativamente ou através de scripts Python diretamente pela IA.
@@ -34,5 +104,4 @@ Sempre que a lógica, o escopo ou as instruções da skill forem atualizados, o 
 **Versão 1.0.0**
 - Criação inicial da skill de UX Heuristics & Acessibilidade.
 - Estruturação do comportamento da IA com Etapa de Entrevista para extração de contexto dinâmico.
-- Implementação da avaliação dividida em Tabelas Duplas por tela (UX + Acessibilidade).
 - Criação dos guias técnicos de referência (`nielsen-heuristics.md`, `accessibility-guidelines.md` e `output-format.md`).

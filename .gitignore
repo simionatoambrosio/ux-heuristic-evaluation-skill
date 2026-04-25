@@ -1,1 +1,14 @@
 outputs/
+.env
+scratch/.env
+node_modules/
+scratch/node_modules/
+
+# Segurança: Nunca commitar os prints de tela dos usuários!
+inputs/*
+!inputs/.gitkeep
+
+# Python caches
+__pycache__/
+*.pyc
+.venv/
